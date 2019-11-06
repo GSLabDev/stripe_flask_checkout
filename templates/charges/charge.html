@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Charge{% endblock %}
+
+{% block body %}
+    <div class="jumbotron">
+        <section>
+            <h3>{{ result['status'] }}</h3>
+        </section>
+
+        <section>
+            <a class="button primary back" href="/charges/new">
+                <span>Test Another Transaction</span>
+            </a>
+        </section>
+    </div>
+
+    <aside class="drawer dark">
+        <header>
+            <div class="content compact">
+                <h3>API Response</h3>
+            </div>
+        </header>
+
+        <article class="content compact">
+            <section>
+                <table cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td>id</td>
+                            <td>{{ result.id }}</td>
+                        </tr>
+                        <tr>
+                            <td>currency</td>
+                            <td>{{ result['currency'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>amount</td>
+                            <td>{{ result['amount'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>status</td>
+                            <td>{{ result['status'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>customer ID</td>
+                            <td>{{ result['customer'] }}</td>
+                        </tr>
+                        <tr>
+                            <td>name</td>
+                            <td>{{ result['billing_details']['name'] }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+    </aside>
+{% endblock %}
+
+
+
