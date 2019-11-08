@@ -20,4 +20,4 @@ Add your Stripe secrete key and publishable key in `.env` file.
 
 ## Demo
 
-![Application flow](flow.gif "Application Flow")
+![Application flow](app_flow.gif "Application Flow")
