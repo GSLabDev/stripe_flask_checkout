@@ -1,6 +1,6 @@
 import os
 import stripe
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, abort, jsonify
 
 app = Flask(__name__)
 
@@ -12,30 +12,74 @@ stripe_keys = {
 stripe.api_key = stripe_keys['secret_key']
 
 @app.route('/')
-def hello_world():
+def index():
     return render_template("index.html")
 
-@app.route('/charges/new', methods=['GET'])
-def new_charge():
-    return render_template('charges/new.html', key=stripe_keys['publishable_key'])
+products_list = [
+    {
+        'id': 1,
+        'name': 'Apple',
+        'description': 'Something really, really special',
+        'amount': 600
+    },
+    {
+        'id': 2,
+        'name': 'Banana',
+        'description': 'Something even more special',
+        'amount': 700
+    },
+]
+
+
+@app.route('/products')
+def list_products():
+    return render_template("products.html", products=products_list)
+
+def get_product(product_id):
+    for product in products_list:
+        if product['id'] == product_id:
+            return product
+    return False
+
+
+@app.route('/products/<int:product_id>')
+def product(product_id):
+    product = get_product(product_id)
+    if product:
+        product['amount_in_dollars'] = product['amount'] / 100
+        return render_template(
+            'charges/new.html',
+            key=stripe_keys['publishable_key'],
+            product=product
+        )
+    return abort(404)
+
 
 @app.route('/charge', methods=['POST'])
 def charge():
-    try:
-        amount = 500   # amount in cents
-        customer = stripe.Customer.create(
-            email='sample@customer.com',
-            source=request.form['stripeToken']
-        )
-        result = stripe.Charge.create(
-            customer=customer.id,
-            amount=amount,
-            currency='usd',
-            description='Test Charge'
-        )
-        return redirect(url_for('show_charge',charge_id=result.id))
-    except stripe.error.StripeError:
-        return render_template('charges/error.html')
+    response = jsonify('error')
+    response.status_code = 500
+
+    product = get_product(int(request.json['product']))
+    if product:
+        try:
+            product = get_product(int(request.json['product']))
+            customer = stripe.Customer.create(
+                email='sample@customer.com',
+                source=request.json['token']
+            )
+            result = stripe.Charge.create(
+                customer=customer.id,
+                amount=product['amount'],
+                currency='usd',
+                description=product['description']
+            )
+            response = jsonify('success')
+            response.status_code = 202
+        except stripe.error.StripeError:
+            return response
+
+    return response
 
 @app.route('/charges/<charge_id>')
 def show_charge(charge_id):

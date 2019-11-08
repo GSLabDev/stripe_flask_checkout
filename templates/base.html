@@ -4,41 +4,7 @@
         <title>{% block title %}{% endblock %}</title>
         <!-- Bootstrap core CSS -->
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-
-        <style type="text/css">
-            table {
-              font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-              border-collapse: collapse;
-              width: 100%;
-            }
-
-            table td, table th {
-              border: 1px solid #ddd;
-              padding: 8px;
-            }
-
-            table tr:nth-child(even){background-color: #f2f2f2;}
-
-            table tr:hover {background-color: #ddd;}
-
-            table th {
-              padding-top: 12px;
-              padding-bottom: 12px;
-              text-align: left;
-              background-color: #4CAF50;
-              color: white;
-            }
-            .float_left{
-                float: left;
-            }
-            .clear{
-                clear: both;
-            }
-            caption {
-              display: table-caption;
-              text-align: center;
-            }
-        </style>
+        <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     </head>
     <body>
         <div class="container">
@@ -46,7 +12,7 @@
                 <nav>
                   <ul class="nav nav-pills pull-right">
                     <li role="presentation"><a href="/">Home</a></li>
-                    <li role="presentation"><a href="/charges/new">Charge</a></li>
+                    <li role="presentation"><a href="/products">Products</a></li>
                   </ul>
                 </nav>
             </div>
@@ -56,5 +22,6 @@
                 <p>© 2019 Stripe Test Checkout</p>
             </footer>
         </div>
+        {% block scripts %}{% endblock %}
     </body>
 </html>

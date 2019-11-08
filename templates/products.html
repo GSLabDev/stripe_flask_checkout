@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+
+{% block body %}
+    <div class="jumbotron container">
+        <h2>Products List</h2>
+        <ul class="list-group">
+            {% for product in products %}
+                <li class="list-group-item">
+                    {% for key, value in product.items() %}
+                        {{key}} : {{value}} </br>
+                    {% endfor %}
+                    </br><a href="/products/{{product['id']}}">Buy Now</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+{% endblock %}
